@@ -1,0 +1,18 @@
+#!/bin/rc
+
+# Usage: generate > output
+#
+# Creates an NDB DNS config file with a list of blocked domains generated from the files at the URLs listed below. Files are expected to be in a hosts-stlye format with blocked domains mapped to 0.0.0.0.
+#
+# The output file is written to stdout.
+
+lists=( \
+	'https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts' \
+)
+
+for (list in $lists) {
+	domains=`{hget $"list | grep '^0\.0\.0\.0' | grep -v '0\.0\.0\.0$' | awk '{print $2}'}
+	for (domain in $domains) {
+		echo 'dom='^$"domain 'ip=0.0.0.0'
+	}
+}
