@@ -14,9 +14,5 @@ lists=( \
 )
 
 for (list in $lists) {
-	domains=`{hget $"list | grep '^0\.0\.0\.0' | grep -v '0\.0\.0\.0$' | awk '{print $2}'}
-	for (domain in $domains) {
-		echo 'dom='^$"domain 'soa='
-		echo '	ip=0.0.0.0'
-	}
+	hget $"list | awk '/^0\.0\.0\.0/ { if ($0 !~ "0\.0\.0\.0$") { print "dom=" $2 " soa=\n\tip=0.0.0.0" } }'
 }
